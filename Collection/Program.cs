@@ -5,9 +5,9 @@ using Collection;
 
 namespace Program;
 
-    class CollectionsExamples
+    public class CollectionsExamples
     {
-        static void Main()
+        public static void Main()
         {
             Console.WriteLine();
             Console.WriteLine("Collection<T> Examples");

@@ -27,7 +27,7 @@ public class Collection<T>
             this.Count++;
         }
 
-        public void AddRange(params T[] items)
+        public void AddRange(params T[] items)      
         {
             foreach (var item in items)
                 this.Add(item);
