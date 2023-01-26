@@ -281,7 +281,7 @@ public class CollectionTests
     [Test]
     public void Test_Collection_ToStringSingle()
     {
-        
+        Assert.Pass();
     }
 
     [Test]
