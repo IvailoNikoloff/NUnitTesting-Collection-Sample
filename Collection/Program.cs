@@ -1,9 +1,10 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using System;
-using Collection;
 
-namespace Program;
+using System;
+
+
+
 
     public class CollectionsExamples
     {

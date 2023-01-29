@@ -1,4 +1,8 @@
-namespace Collection.UnitTests;
+
+
+using System;
+using System.Linq;
+using Microsoft.VisualBasic;
 
 public class CollectionTests
 {  
@@ -79,6 +83,19 @@ public class CollectionTests
         
         Assert.That(item.ToString(), Is.Not.EqualTo("5"));
     }
+    
+    // DDT
+    [TestCase ("5, 6, 7", 1, "6")]
+    [TestCase ("Pesho, Gosho, Ivan", 2, "Ivan")]
+    [TestCase ("Pesho, Gosho, Ivan", 2, "Ivan")]
+    public void Test_Collection_GetByValidIndexInRange_DDT_Approach(string data, int index, string expected)
+    {
+        var coll = new Collection<string>(data.Split(", "));
+        var item = coll[index];
+        
+        Assert.That(item.ToString(), Is.EqualTo(expected));
+    }
+    
     
     [Test]
     public void Test_Collection_GetByInvalidIndexOutOfRange()
@@ -293,13 +310,62 @@ public class CollectionTests
     [Test]
     public void Test_Collection_ToStringNestedCollections()
     {
-        
+        var names = new Collection<string>("Teddy", "Gerry");
+        var nums = new Collection<int>(10, 20);
+        var dates = new Collection<DateTime>();
+        var nested = new Collection<object>(names, nums, dates);
+        string nestedToString = nested.ToString();
+        Assert.That(nestedToString, 
+            Is.EqualTo("[[Teddy, Gerry], [10, 20], []]"));
+
     }
+    
+    //DDT
+    [TestCase("Teddy, Gerry", "10, 20", "01-01-2020", "[[Teddy, Gerry], [10, 20], [1.1.2020 г. 0:00:00]]")]
+    [TestCase("Teddy, Gerry, Pesho", "2000", "01-01-2020, 01-02-2023", "[[Teddy, Gerry, Pesho], [2000], [1.1.2020 г. 0:00:00, 1.2.2023 г. 0:00:00]]")]
+    public void Test_Collection_ToStringNestedCollections_DDT_Approach(string names, string numbers, string dates , string expected)
+    {
+        
+        var namesColl = new Collection<string>(names.Split(", "));
+
+        var numsCollRaw = new Collection<string>(numbers.Split(", "));
+        var numbersColl = new Collection<int>();
+        for (int i = 0; i < numsCollRaw.Count; i++)
+        {
+            numbersColl.Add(int.Parse(numsCollRaw[i]));
+        }
+        
+
+
+        var datesRaw = new Collection<string>(dates.Split(", "));
+        var datesColl = new Collection<DateTime>();
+        for (int i = 0; i < datesRaw.Count; i++)
+        {
+            datesColl.Add(DateTime.Parse(datesRaw[i]));
+        }
+        
+        var nested = new Collection<object>(namesColl, numbersColl, datesColl);
+        string nestedToString = nested.ToString();
+        Assert.That(nestedToString, 
+            Is.EqualTo(expected));
+
+    }
+    
+    
 
     [Test]
     public void Test_Collection_1MillionItems()
     {
-        
+        const int itemsCount = 1000000;
+        var nums = new Collection<int>();
+        nums.AddRange(Enumerable.Range(1, itemsCount).ToArray());
+        Assert.That(nums.Count == itemsCount);
+        Assert.That(nums.Capacity >= nums.Count);
+        for (int i = itemsCount - 1; i >= 0; i--)
+            nums.RemoveAt(i);
+        Assert.That(nums.ToString() == "[]");
+        Assert.That(nums.Capacity >= nums.Count);
+
     }
 
 }
